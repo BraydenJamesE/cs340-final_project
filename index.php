@@ -52,8 +52,13 @@ require_once "config.php";
                         <li> UPDATE </li>
                         <li> DELETE  </li>
                     </ol>
+                    <div class = "button-group">
+                        <a href="login.php" class="btn btn-success">Login</a>
+                        <a href="createUsers.php" class="btn btn-success">Create Account</a>
+                        <a href="createRating.php" class="btn btn-success">Add New Rating</a>
+                        <a href="viewUsers.php" class="btn btn-success">View Our Current Users</a>
+                    </div>
                     <h2 class="pull-left">Recipes</h2>
-                    <a href="createRating.php" class="btn btn-success pull-right">Add New Rating</a>
                 </div>
                 <?php
                 // Include config file
@@ -99,7 +104,7 @@ require_once "config.php";
                     echo "ERROR: could not execute $sql. <br>" . mysqli_error($link);
                 }
                           /* Creating a sub database */
-                echo "<br><h2> Here are some of our favorite ingredients!</h2><br>";
+                echo "<br><h2> Here are some of our most used ingredients!</h2><br>";
 
                 $sql2 = "SELECT c.`ingredient name` as 'Ingredient', COUNT(*) as 'Number of Recipes with this ingredient' 
                     FROM contains c
