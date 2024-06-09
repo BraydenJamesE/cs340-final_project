@@ -17,7 +17,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $Uemail = trim($_POST["Uemail"]);
     if(empty($Uemail)){
         $Uemail_err = "Please enter an email.";
-    } elseif(!filter_var($Uemail, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+    } elseif(!filter_var($Uemail, FILTER_VALIDATE_EMAIL)){
         $Uemail_err = "Please enter a valid email.";
     } 
 
@@ -100,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <span class="help-block"><?php echo $Uemail_err;?></span>
                         </div>
                         <div class="form-group <?php echo (!empty($Upass_err)) ? 'has-error' : ''; ?>">
-                            <label>Passwprd</label>
+                            <label>Password</label>
                             <input type="text" name="Upass" class="form-control" value="<?php echo $Upass; ?>">
                             <span class="help-block"><?php echo $Upass_err;?></span>
                         </div>
