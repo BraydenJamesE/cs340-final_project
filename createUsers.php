@@ -2,14 +2,14 @@
 // Include config file
 require_once "config.php";
 
-$Uid = $Uname = $Uemail = $Upass = "";
+$Uid = $Uname = $Uemail = $Upass = null;
 $Uid_err = $Uname_err = $Uemail_err = $Upass_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $Uid = trim($_POST["Uname"]);
+    $Uid = trim($_POST["Uid"]);
     if(empty($Uid)){
-        $Uid_err = "Please enter your name.";
+        $Uid_err = "Please enter a member Id.";
     } elseif(!ctype_digit($Uid)){
         $Uid_err = "Please enter a valid name.";
     } 
@@ -39,18 +39,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($Uname_err) && empty($Uemail_err) && empty($Upass_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO MEMBER (`member id`, `member name`, email, password) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO member (`member id`, `member name`, `email`, `password`) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "isss", $param_Uname, $param_Uemail, $param_Upass);
+            mysqli_stmt_bind_param($stmt, "isss", $param_Uid, $param_Uname, $param_Uemail, $param_Upass);
             
             // Set parameters
             $param_Uid = $Uid;
             $param_Uname = $Uname;
             $param_Uemail = $Uemail;
             $param_Upass = password_hash($Upass, PASSWORD_DEFAULT); // Creates a password hash
-            
+
+
+
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
                 // Records created successfully. Redirect to landing page
