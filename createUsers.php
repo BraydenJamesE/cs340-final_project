@@ -32,7 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($Uname_err) && empty($Uemail_err) && empty($Upass_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO EMPLOYEE (Uname, Uemail, Upass) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO MEMBER (Uname, Uemail, Upass) VALUES (?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -49,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 header("location: index.php");
                 exit();
             } else{
-                echo "<center><h4>Error while creating new employee</h4></center>";
+                echo "<center><h4>Error while creating new user</h4></center>";
             }
         }
          
