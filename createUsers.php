@@ -2,11 +2,18 @@
 // Include config file
 require_once "config.php";
 
-$Uname = $Uemail = $Upass = "";
-$Uname_err = $Uemail_err = $Upass_err = "";
+$Uid = $Uname = $Uemail = $Upass = "";
+$Uid_err = $Uname_err = $Uemail_err = $Upass_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $Uid = trim($_POST["Uname"]);
+    if(empty($Uid)){
+        $Uid_err = "Please enter your name.";
+    } elseif(!ctype_digit($Uid)){
+        $Uid_err = "Please enter a valid name.";
+    } 
+
     // Validate Name
     $Uname = trim($_POST["Uname"]);
     if(empty($Uname)){
@@ -32,13 +39,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($Uname_err) && empty($Uemail_err) && empty($Upass_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO MEMBER (`member name`, email, password) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO MEMBER (`member id`, `member name`, email, password) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sss", $param_Uname, $param_Uemail, $param_Upass);
+            mysqli_stmt_bind_param($stmt, "isss", $param_Uname, $param_Uemail, $param_Upass);
             
             // Set parameters
+            $param_Uid = $Uid;
             $param_Uname = $Uname;
             $param_Uemail = $Uemail;
             $param_Upass = password_hash($Upass, PASSWORD_DEFAULT); // Creates a password hash
@@ -85,6 +93,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
                     <p>Please fill this form and confirm to create a user.</p>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                        <div class="form-group <?php echo (!empty($Uid_err)) ? 'has-error' : ''; ?>">
+                            <label>ID</label>
+                            <input type="text" name="Uid" class="form-control" value="<?php echo $Uid; ?>">
+                            <span class="help-block"><?php echo $Uid_err;?></span>
+                        </div>
                         <div class="form-group <?php echo (!empty($Uname_err)) ? 'has-error' : ''; ?>">
                             <label>Name</label>
                             <input type="text" name="Uname" class="form-control" value="<?php echo $Uname; ?>">
