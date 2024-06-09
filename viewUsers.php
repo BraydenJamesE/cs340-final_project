@@ -9,10 +9,6 @@
     <body>
         <h1>Users</h1>
         <?php
-            if($link === false){
-                die("ERROR: Could not connect. " . mysqli_connect_error());
-            }
-
             $query = "SELECT `member name` FROM member";
             $result = mysqli_query($link, $query);
             echo "<table id='t01'>";
