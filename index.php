@@ -62,9 +62,14 @@ require_once "config.php";
                             }
                         ?>
                         <?php
-                        if (isset($_SESSION['id'])) {
-                            echo "<a href='updateUsers.php' class='btn btn-success'>Update Account</a>";
-                        }
+                            if (isset($_SESSION['id'])) {
+                                echo "<a href='updateUsers.php' class='btn btn-success'>Update Account</a>";
+                            }
+                        ?>
+                        <?php
+                            if (isset($_SESSION['id'])) {
+                                echo "<a href='deleteUser.php' class='btn btn-success'>Delete Account</a>";
+                            }
                         ?>
                         <a href="createUsers.php" class="btn btn-success">Create Account</a>
                         <?php

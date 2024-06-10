@@ -64,49 +64,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Update Users</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <style type="text/css">
+        .wrapper{
+            width: 500px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
-<body>
-    <h1>Update Users</h1>
-    <div>
-        <a href="index.php" class="btn btn-success">Home</a>
+<div class="wrapper">
+        <div class="container-field">
+            <div class="row">
+                <div class="col-md-12">
+                        <div class="page-header">
+                            <h2>Update Users</h2>
+                        </div>
+                        <body>
+                            <div>
+                                <a href="index.php" class="btn btn-success">Home</a>
+                            </div>
+                            <?php
+                            $memberId = $_SESSION['id'];
+                            $query = "SELECT m.`member name`, m.`email`, m.`password`, l.`city`, l.`state`, l.`country` 
+                                    FROM `member` m 
+                                    LEFT JOIN `location` l ON m.`member id` = l.`member id` 
+                                    WHERE m.`member id` = $memberId;";
+                            $result = mysqli_query($link, $query);
+                            $row = mysqli_fetch_row($result);
+                            ?>
+                            <form method="POST" action="updateUsers.php">
+                                <div class="form-group">
+                                    <label for="memberName">Member Name</label>
+                                    <input type="text" name="memberName" class="form-control" placeholder="<?php echo htmlspecialchars($row[0], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <span class="text-danger"><?php echo $memberName_err; ?></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="text" name="email" class="form-control" placeholder="<?php echo htmlspecialchars($row[1], ENT_QUOTES, 'UTF-8'); ?>">
+                                    <span class="text-danger"><?php echo $email_err; ?></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="text" name="password" class="form-control" placeholder="password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" name="city" class="form-control" placeholder="<?php echo htmlspecialchars($row[3], ENT_QUOTES, 'UTF-8'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State</label>
+                                    <input type="text" name="state" class="form-control" placeholder="<?php echo htmlspecialchars($row[4], ENT_QUOTES, 'UTF-8'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <input type="text" name="country" class="form-control" placeholder="<?php echo htmlspecialchars($row[5], ENT_QUOTES, 'UTF-8'); ?>">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </body>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <?php
-    $memberId = $_SESSION['id'];
-    $query = "SELECT m.`member name`, m.`email`, m.`password`, l.`city`, l.`state`, l.`country` 
-              FROM `member` m 
-              LEFT JOIN `location` l ON m.`member id` = l.`member id` 
-              WHERE m.`member id` = $memberId;";
-    $result = mysqli_query($link, $query);
-    $row = mysqli_fetch_row($result);
-    ?>
-    <form method="POST" action="updateUsers.php">
-        <div class="form-group">
-            <label for="memberName">Member Name</label>
-            <input type="text" name="memberName" class="form-control" placeholder="<?php echo htmlspecialchars($row[0], ENT_QUOTES, 'UTF-8'); ?>">
-            <span class="text-danger"><?php echo $memberName_err; ?></span>
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="text" name="email" class="form-control" placeholder="<?php echo htmlspecialchars($row[1], ENT_QUOTES, 'UTF-8'); ?>">
-            <span class="text-danger"><?php echo $email_err; ?></span>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="text" name="password" class="form-control" placeholder="password">
-        </div>
-        <div class="form-group">
-            <label for="city">City</label>
-            <input type="text" name="city" class="form-control" placeholder="<?php echo htmlspecialchars($row[3], ENT_QUOTES, 'UTF-8'); ?>">
-        </div>
-        <div class="form-group">
-            <label for="state">State</label>
-            <input type="text" name="state" class="form-control" placeholder="<?php echo htmlspecialchars($row[4], ENT_QUOTES, 'UTF-8'); ?>">
-        </div>
-        <div class="form-group">
-            <label for="country">Country</label>
-            <input type="text" name="country" class="form-control" placeholder="<?php echo htmlspecialchars($row[5], ENT_QUOTES, 'UTF-8'); ?>">
-        </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-    </form>
-</body>
 </html>
