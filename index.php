@@ -92,7 +92,7 @@ require_once "config.php";
                         echo "<th width=10%>Cook time (in minutes)</th>";
                         echo "<th width=10%>Created By</th>";
                         echo "<th width=10%>Serving Size</th>";
-                        echo "<th width=5%>Add a Rating</th>";
+                        echo "<th width=5%>Actions</th>";
                         echo "</tr>";
                         echo "</thead>";
                         echo "<tbody>";
@@ -108,8 +108,8 @@ require_once "config.php";
                             }
                             else {
                                 echo "<a href='#' title='Please login or create an account to add a rating.' data-toggle='tooltip' onclick='return false;' style = 'color: #ccc; cursor: not-allowed;'><span class='glyphicon glyphicon-plus-sign'></span></a>";
-
                             }
+                            echo "<a href='viewRecipeInfo.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='See additional info' data-toggle='tooltip'><span class='glyphicon glyphicon-info-sign'></span></a>";
                             echo "</td>";
                             echo "</tr>";
                         }
