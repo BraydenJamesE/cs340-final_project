@@ -78,14 +78,18 @@ require_once "config.php";
                     $sql = "SELECT Ssn,Fname,Lname,Salary, Address, Bdate, PayLevel(Ssn) as Level, Super_ssn, Dno
                         FROM EMPLOYEE";
                 */
-                $sql = "SELECT `recipe name` as 'Recipe Name', `Cook time`, `member id` as 'Created By', `serving size` as 'Serving Size' FROM recipe";
+                //$sql = "SELECT `recipe name` as 'Recipe Name', `Cook time`, `member id` as 'Created By', `serving size` as 'Serving Size' FROM recipe";
+                $sql = "SELECT r.`recipe name` as 'Recipe Name', r.`Cook time`, m.`member name` as 'Created By', r.`serving size` as 'Serving Size'
+                        FROM recipe r 
+                        INNER JOIN member m ON r.`member id` = m.`member id`";
+
                 if($result = mysqli_query($link, $sql)) {
                     if (mysqli_num_rows($result) > 0) {
                         echo "<table class='table table-bordered table-striped'>";
                         echo "<thead>";
                         echo "<tr>";
                         echo "<th width=8%>Recipe Name</th>";
-                        echo "<th width=10%>Cook time</th>";
+                        echo "<th width=10%>Cook time (in minutes)</th>";
                         echo "<th width=10%>Created By</th>";
                         echo "<th width=10%>Serving Size</th>";
                         echo "<th width=5%>Add a Rating</th>";
