@@ -2,6 +2,10 @@
     session_start();
     require_once "config.php";
     
+    if(isset($_SESSION['id'])) {
+        header("location: index.php");
+    }
+
     if ($_SERVER ["REQUEST_METHOD"] == "POST") {
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -24,11 +28,12 @@
 <html>
     <head>
         <title>Login</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     </head>
     <body>
+        <h1>Login</h1>
         <div>
-            <a href="index.php">Home</a>
+            <a href="index.php" class="btn btn-success">Home</a>
         </div>
         <form method="post" action="login.php">
             <input type="text" name="username" required placeholder="Username">

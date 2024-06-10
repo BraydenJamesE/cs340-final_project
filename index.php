@@ -56,6 +56,7 @@ require_once "config.php";
                         <?php
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='logout.php' class='btn btn-success'>Logout</a>";
+                                echo "<a href='updateUsers.php' class='btn btn-success'>Update Account</a>";
                             }
                             else {
                                 echo "<a href='login.php' class='btn btn-success'>Login</a>";
