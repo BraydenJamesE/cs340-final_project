@@ -63,7 +63,11 @@ require_once "config.php";
                             }
                         ?>
                         <a href="createUsers.php" class="btn btn-success">Create Account</a>
-                        <a href="createRecipe.php" class="btn btn-success">Add New Recipe</a>
+                        <?php
+                            if (isset($_SESSION['id'])) {
+                                echo "<a href='createRecipe.php' class='btn btn-success'>Add New Recipe</a>";
+                            }
+                        ?>
                         <a href="viewUsers.php" class="btn btn-success">View Our Current Users</a>
                     </div>
                     <h2 class="pull-left">Recipes</h2>
@@ -72,17 +76,15 @@ require_once "config.php";
                 // Include config file
                 require_once "config.php";
 
-                // Attempt select all employee query execution
-                // *****
-                // Insert your function for Salary Level
-                /*
-                    $sql = "SELECT Ssn,Fname,Lname,Salary, Address, Bdate, PayLevel(Ssn) as Level, Super_ssn, Dno
-                        FROM EMPLOYEE";
-                */
-                //$sql = "SELECT `recipe name` as 'Recipe Name', `Cook time`, `member id` as 'Created By', `serving size` as 'Serving Size' FROM recipe";
-                $sql = "SELECT r.`recipe name` as 'Recipe Name', r.`Cook time`, m.`member name` as 'Created By', r.`serving size` as 'Serving Size'
-                        FROM recipe r 
-                        INNER JOIN member m ON r.`member id` = m.`member id`";
+                $sql = "SELECT r.`recipe name` AS 'Recipe Name',
+                            r.`Cook time`,
+                            m.`member name` AS 'Created By',
+                            r.`serving size` AS 'Serving Size',
+                            IF(COUNT(t.`rating`) = 0, 'No ratings yet', ROUND(AVG(t.`rating`), 2)) AS 'Average Rating'
+                        FROM recipe r
+                        INNER JOIN member m ON r.`member id` = m.`member id`
+                        LEFT JOIN rates t ON r.`recipe name`  = t.`recipe name`
+                        GROUP BY r.`recipe name`, r.`Cook time`, m.`member name`, r.`serving size`";
 
                 if($result = mysqli_query($link, $sql)) {
                     if (mysqli_num_rows($result) > 0) {
@@ -93,6 +95,7 @@ require_once "config.php";
                         echo "<th width=10%>Cook time (in minutes)</th>";
                         echo "<th width=10%>Created By</th>";
                         echo "<th width=10%>Serving Size</th>";
+                        echo "<th width=10%>Average Rating</th>";
                         echo "<th width=5%>Actions</th>";
                         echo "</tr>";
                         echo "</thead>";
@@ -103,6 +106,7 @@ require_once "config.php";
                             echo "<td>" . $row['Cook time'] . "</td>";
                             echo "<td>" . $row['Created By'] . "</td>";
                             echo "<td>" . $row['Serving Size'] . "</td>";
+                            echo "<td>" . $row['Average Rating'] . "</td>";
                             echo "<td>";
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='createRating.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='Add rating to this recipe!' data-toggle='tooltip'><span class='glyphicon glyphicon-plus-sign'></span></a>";
