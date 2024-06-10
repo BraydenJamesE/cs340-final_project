@@ -6,7 +6,7 @@ session_start();
 $member_id = $_SESSION['id'];
 
 $Rname = $Rtime = $Rsize = null;
-$Rname_err = $Rtime_err = $Rsize_err = $ingredients_err = "";
+$Rname_err = $Rtime_err = $Rsize_err = $ingredients_err = $cookware_err = "";
 
 $ingredientOptions = "";
 $sql = "SELECT `ingredient name` FROM ingredient";
@@ -16,6 +16,16 @@ if (!$result) {
 }
 while ($row = mysqli_fetch_assoc($result)) {
     $ingredientOptions .= "<option value='" . htmlspecialchars($row['ingredient name']) . "'>" . htmlspecialchars($row['ingredient name']) . "</option>";
+}
+
+$cookwareOptions = "";
+$sql_cookware = "SELECT `cookware name` FROM cookware";
+$result_cookware = mysqli_query($link, $sql_cookware);
+if (!$result_cookware) {
+    die("Error fetching cookware: " . mysqli_error($link));
+}
+while ($row_cookware = mysqli_fetch_assoc($result_cookware)) {
+    $cookwareOptions .= "<option value='" . htmlspecialchars($row_cookware['cookware name']) . "'>" . htmlspecialchars($row_cookware['cookware name']) . "</option>";
 }
 
 // Processing form data when form is submitted
@@ -48,8 +58,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $ingredients_err = "Please select at least one ingredient.";
     }
 
+    // Validate Cookware
+    $Rcookware = $_POST['cookware'];
+    if(empty($Rcookware)){
+        $cookware_err = "Please select at least one cookware.";
+}
+
     // Check input errors before inserting in database
-    if(empty($Rtime_err) && empty($Rsize_err) && empty($Rname_err) && empty($ingredients_err)){
+    if(empty($Rtime_err) && empty($Rsize_err) && empty($Rname_err) && empty($ingredients_err) && empty($cookware_err)){
         // Prepare an insert statement
         $sql = "INSERT INTO recipe (`recipe name`, `cook time`, `serving size`, `member id`) VALUES (?, ?, ?, ?)";
          
@@ -78,6 +94,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 }
 
                 mysqli_stmt_close($stmt_contains);
+
+                $sql_uses = "INSERT INTO uses (`recipe`, `cookware`) VALUES (?, ?)";
+                if($stmt_uses = mysqli_prepare($link, $sql_uses)){
+                    mysqli_stmt_bind_param($stmt_uses, "ss", $param_recipe_name, $param_cookware_name);
+
+                    foreach($Rcookware as $cookware_name){
+                        $param_recipe_name = $Rname;
+                        $param_cookware_name = $cookware_name;
+                        mysqli_stmt_execute($stmt_uses);
+                    }
+                }
+
+                mysqli_stmt_close($stmt_uses);
+
                 // Records created successfully. Redirect to landing page
                 header("location: index.php");
                 exit();
@@ -139,6 +169,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                 <?php echo $ingredientOptions; ?>
                             </select>
                             <span class="help-block"><?php echo $ingredients_err;?></span>
+                        </div>
+                        <div class="form-group <?php echo (!empty($cookware_err)) ? 'has-error' : ''; ?>">
+                            <label>Cookware</label>
+                            <select name="cookware[]" class="form-control" multiple>
+                                <?php echo $cookwareOptions; ?>
+                            </select>
+                            <span class="help-block"><?php echo $cookware_err;?></span>
                         </div>
                         <input type="submit" class="btn btn-primary" value="Add">
                         <a href="index.php" class="btn btn-default">Cancel</a>
