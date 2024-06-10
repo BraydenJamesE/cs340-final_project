@@ -7,9 +7,15 @@ $RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " 
 <html>
 <head>
     <title>Additional Info</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
     <body>
+<div class="container">
+    <p></p>
+    <div>
+        <a href="index.php" class="btn btn-success">Home</a>
+    </div>
+    <h1>Additional Info on <?php echo htmlspecialchars($RecipeName); ?></h1>
         <h2>Ingredients</h2>
         <?php
             $query = "SELECT c.`ingredient name` AS 'Needed Ingredients'
@@ -38,5 +44,6 @@ $RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " 
         }
         echo "</table>";
         ?>
+    </div>
     </body>
 </html>
