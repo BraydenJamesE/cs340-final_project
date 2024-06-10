@@ -2,17 +2,11 @@
 // Include config file
 require_once "config.php";
 
-$Uid = $Uname = $Uemail = $Upass = $City = $State = $Country = null;
-$Uid_err = $Uname_err = $Uemail_err = $Upass_err = $City_err = $State_err = $Country_err = "";
+$Uname = $Uemail = $Upass = $City = $State = $Country = null;
+$Uname_err = $Uemail_err = $Upass_err = $City_err = $State_err = $Country_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $Uid = trim($_POST["Uid"]);
-    if(empty($Uid)){
-        $Uid_err = "Please enter a member Id.";
-    } elseif(!ctype_digit($Uid)){
-        $Uid_err = "Please enter a valid name.";
-    } 
 
     // Validate Name
     $Uname = trim($_POST["Uname"]);
@@ -54,14 +48,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(empty($Uid_err) && empty($Uname_err) && empty($Uemail_err) && empty($Upass_err) && empty($City_err) && empty($State_err) && empty($Country_err)){
         // Prepare an insert statement
-        $sql = "INSERT INTO member (`member id`, `member name`, `email`, `password`) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO member (`member name`, `email`, `password`) VALUES (?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "isss", $param_Uid, $param_Uname, $param_Uemail, $param_Upass);
+            mysqli_stmt_bind_param($stmt, "sss", $param_Uname, $param_Uemail, $param_Upass);
             
             // Set parameters
-            $param_Uid = $Uid;
             $param_Uname = $Uname;
             $param_Uemail = $Uemail;
             $param_Upass = $Upass;
@@ -71,12 +64,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
 
+                $mem_id = mysqli_insert_id($link);
+
                 $sql_location = "INSERT INTO location (`member id`, `city`, `state`, `country`) VALUES (?, ?, ?, ?)";
                 if($stmt_location = mysqli_prepare($link, $sql_location)){
                     mysqli_stmt_bind_param($stmt_location, "isss", $param_Uid, $param_City, $param_State, $param_Country);
 
 
-                    $param_Uid = $Uid;
+                    $param_Uid = $mem_id;
                     $param_City = $City;
                     $param_State = $State;
                     $param_Country = $Country;
@@ -126,11 +121,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
                     <p>Please fill this form and confirm to create a user.</p>
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                        <div class="form-group <?php echo (!empty($Uid_err)) ? 'has-error' : ''; ?>">
-                            <label>ID</label>
-                            <input type="text" name="Uid" class="form-control" value="<?php echo $Uid; ?>">
-                            <span class="help-block"><?php echo $Uid_err;?></span>
-                        </div>
                         <div class="form-group <?php echo (!empty($Uname_err)) ? 'has-error' : ''; ?>">
                             <label>Name</label>
                             <input type="text" name="Uname" class="form-control" value="<?php echo $Uname; ?>">
