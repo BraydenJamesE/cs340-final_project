@@ -49,7 +49,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_Uid = $Uid;
             $param_Uname = $Uname;
             $param_Uemail = $Uemail;
-            $param_Upass = password_hash($Upass, PASSWORD_DEFAULT); // Creates a password hash
+            $param_Upass = $Upass;
 
 
 
