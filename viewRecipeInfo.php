@@ -11,11 +11,12 @@ $RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " 
 </head>
     <body>
 <div class="container">
-    <p></p>
+
+    <h1>Additional Info on <?php echo htmlspecialchars($RecipeName); ?></h1>
     <div>
         <a href="index.php" class="btn btn-success">Home</a>
     </div>
-    <h1>Additional Info on <?php echo htmlspecialchars($RecipeName); ?></h1>
+    <p></p>
         <h2>Ingredients</h2>
         <?php
             $query = "SELECT c.`ingredient name` AS 'Needed Ingredients'
