@@ -164,14 +164,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <span class="help-block"><?php echo $Rsize_err;?></span>
                         </div>
                         <div class="form-group <?php echo (!empty($ingredients_err)) ? 'has-error' : ''; ?>">
-                            <label>Ingredients</label>
+                            <label>Ingredients (Press Ctrl/Cmd to select multiple)</label>
                             <select name="ingredients[]" class="form-control" multiple>
                                 <?php echo $ingredientOptions; ?>
                             </select>
                             <span class="help-block"><?php echo $ingredients_err;?></span>
                         </div>
                         <div class="form-group <?php echo (!empty($cookware_err)) ? 'has-error' : ''; ?>">
-                            <label>Cookware</label>
+                            <label>Cookware (Press Ctrl/Cmd to select multiple)</label>
                             <select name="cookware[]" class="form-control" multiple>
                                 <?php echo $cookwareOptions; ?>
                             </select>
