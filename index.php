@@ -53,7 +53,14 @@ require_once "config.php";
                         <li> DELETE  </li>
                     </ol>
                     <div class = "button-group">
-                        <a href="login.php" class="btn btn-success">Login</a>
+                        <?php
+                            if (isset($_SESSION['id'])) {
+                                echo "<a href='logout.php' class='btn btn-success'>Logout</a>";
+                            }
+                            else {
+                                echo "<a href='login.php' class='btn btn-success'>Login</a>";
+                            }
+                        ?>
                         <a href="createUsers.php" class="btn btn-success">Create Account</a>
                         <a href="createRating.php" class="btn btn-success">Add New Rating</a>
                         <a href="viewUsers.php" class="btn btn-success">View Our Current Users</a>

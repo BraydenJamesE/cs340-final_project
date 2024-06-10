@@ -14,8 +14,8 @@
             $query2 = "SELECT `member id` FROM member WHERE email = '$username' AND password = '$password'";
             $result2 = mysqli_query($link, $query2);
             $row = mysqli_fetch_row($result2);
-            $_SESSION['username'] = $row[0];
-            echo "Login successful";
+            $_SESSION['id'] = $row[0];
+            header("location: index.php");
         } else {
             echo "Login failed";
         }
@@ -27,7 +27,9 @@
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
     <body>
-        <a href = viewUsers.php>link<a>
+        <div>
+            <a href="index.php">Home</a>
+        </div>
         <form method="post" action="login.php">
             <input type="text" name="username" required placeholder="Username">
             <input type="password" name="password" required placeholder="Password">
