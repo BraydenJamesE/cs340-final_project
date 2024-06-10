@@ -2,8 +2,8 @@
 // Include config file
 require_once "config.php";
 
-$Uid = $Uname = $Uemail = $Upass = null;
-$Uid_err = $Uname_err = $Uemail_err = $Upass_err = "";
+$Uid = $Uname = $Uemail = $Upass = $City = $State = $Country = null;
+$Uid_err = $Uname_err = $Uemail_err = $Upass_err = $City_err = $State_err = $Country_err = "";
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -36,14 +36,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Upass_err = "Please enter a password.";     
     }
 
+    $City = trim($_POST["City"]);
+    if(empty($City)){
+        $City_err = "Please enter a city.";     
+    }
+
+    $State = trim($_POST["State"]);
+    if(empty($State)){
+        $State_err = "Please enter a state.";     
+    }
+
+    $Country = trim($_POST["Country"]);
+    if(empty($Upass)){
+        $Country_err = "Please enter a country.";     
+    }
+
     // Check input errors before inserting in database
-    if(empty($Uname_err) && empty($Uemail_err) && empty($Upass_err)){
+    if(empty($Uid_err) && empty($Uname_err) && empty($Uemail_err) && empty($Upass_err) && empty($City_err) && empty($State_err) && empty($Country_err)){
         // Prepare an insert statement
         $sql = "INSERT INTO member (`member id`, `member name`, `email`, `password`) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "isss", $param_Uid, $param_Uid, $param_Uname, $param_Uemail, $param_Upass);
+            mysqli_stmt_bind_param($stmt, "isss", $param_Uid, $param_Uname, $param_Uemail, $param_Upass);
             
             // Set parameters
             $param_Uid = $Uid;
@@ -55,6 +70,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
+
+                $sql_location = "INSERT INTO location (`member id`, `city`, `state`, `country`) VALUES (?, ?, ?, ?)";
+                if($stmt_location = mysqli_prepare($link, $sql_location)){
+                    mysqli_stmt_bind_param($stmt_location, "isss", $param_Uid, $param_City, $param_State, $param_Country);
+
+
+                    $param_Uid = $Uid;
+                    $param_City = $City;
+                    $param_State = $State;
+                    $param_Country = $Country;
+                    mysqli_stmt_execute($stmt_location);
+                    }
+                }
+
+                mysqli_stmt_close($stmt_location);
+
                 // Records created successfully. Redirect to landing page
                 header("location: index.php");
                 exit();
@@ -69,7 +100,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     // Close connection
     mysqli_close($link);
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -114,6 +145,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <label>Password</label>
                             <input type="password" name="Upass" class="form-control" value="<?php echo $Upass; ?>">
                             <span class="help-block"><?php echo $Upass_err;?></span>
+                        </div>
+                        <div class="form-group <?php echo (!empty($City_err)) ? 'has-error' : ''; ?>">
+                            <label>City</label>
+                            <input type="text" name="City" class="form-control" value="<?php echo $City; ?>">
+                            <span class="help-block"><?php echo $City_err;?></span>
+                        </div>
+                        <div class="form-group <?php echo (!empty($State_err)) ? 'has-error' : ''; ?>">
+                            <label>State</label>
+                            <input type="text" name="State" class="form-control" value="<?php echo $State; ?>">
+                            <span class="help-block"><?php echo $State_err;?></span>
+                        </div>
+                        <div class="form-group <?php echo (!empty($Country_err)) ? 'has-error' : ''; ?>">
+                            <label>Country</label>
+                            <input type="text" name="Country" class="form-control" value="<?php echo $Country; ?>">
+                            <span class="help-block"><?php echo $Country_err;?></span>
                         </div>
                         <input type="submit" class="btn btn-primary" value="Register">
                         <a href="index.php" class="btn btn-default">Cancel</a>
