@@ -55,7 +55,7 @@ require_once "config.php";
                     <div class = "button-group">
                         <a href="login.php" class="btn btn-success">Login</a>
                         <a href="createUsers.php" class="btn btn-success">Create Account</a>
-                        <a href="createRating.php" class="btn btn-success">Add New Rating</a>
+                        <a href="createRecipe.php" class="btn btn-success">Add New Recipe</a>
                         <a href="viewUsers.php" class="btn btn-success">View Our Current Users</a>
                     </div>
                     <h2 class="pull-left">Recipes</h2>
@@ -81,6 +81,7 @@ require_once "config.php";
                         echo "<th width=10%>Cook time</th>";
                         echo "<th width=10%>Created By</th>";
                         echo "<th width=10%>Serving Size</th>";
+                        echo "<th width=5%>Action</th>";
                         echo "</tr>";
                         echo "</thead>";
                         echo "<tbody>";
@@ -90,6 +91,8 @@ require_once "config.php";
                             echo "<td>" . $row['Cook time'] . "</td>";
                             echo "<td>" . $row['Created By'] . "</td>";
                             echo "<td>" . $row['Serving Size'] . "</td>";
+                            echo "<td>";
+                                echo "<a href='createRating.php?recipe_name=". urlencode($row['Recipe Name'])."' title='Add rating to this recipe!' data-toggle='tooltip'><span class='glyphicon glyphicon-plus-sign'></span></a>";
                             echo "</td>";
                             echo "</tr>";
                         }
