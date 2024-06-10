@@ -88,7 +88,7 @@ require_once "config.php";
                         echo "<th width=10%>Cook time</th>";
                         echo "<th width=10%>Created By</th>";
                         echo "<th width=10%>Serving Size</th>";
-                        echo "<th width=5%>Action</th>";
+                        echo "<th width=5%>Add a Rating</th>";
                         echo "</tr>";
                         echo "</thead>";
                         echo "<tbody>";
@@ -99,7 +99,13 @@ require_once "config.php";
                             echo "<td>" . $row['Created By'] . "</td>";
                             echo "<td>" . $row['Serving Size'] . "</td>";
                             echo "<td>";
-                                echo "<a href='createRating.php?recipe_name=". urlencode($row['Recipe Name'])."' title='Add rating to this recipe!' data-toggle='tooltip'><span class='glyphicon glyphicon-plus-sign'></span></a>";
+                            if (isset($_SESSION['id'])) {
+                                echo "<a href='createRating.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='Add rating to this recipe!' data-toggle='tooltip'><span class='glyphicon glyphicon-plus-sign'></span></a>";
+                            }
+                            else {
+                                echo "<a href='#' title='Please login or create an account to add a rating.' data-toggle='tooltip' onclick='return false;' style = 'color: #ccc; cursor: not-allowed;'><span class='glyphicon glyphicon-plus-sign'></span></a>";
+
+                            }
                             echo "</td>";
                             echo "</tr>";
                         }

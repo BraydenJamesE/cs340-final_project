@@ -1,6 +1,6 @@
 <?php
 // Retrieve the recipe name from the URL parameter
-
+    session_start();
 // Include config file
 global $link;
 require_once "config.php";
@@ -9,17 +9,10 @@ require_once "config.php";
 $RecipeName = $Mid = $Rating = "";
 
 $RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " ";
+$Mid = $_SESSION['id'];
 
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    // Validate First name
-    $Mid = trim($_POST["Member Id"]);
-    if(empty($Mid)){
-        $Mid_err = "Please enter a your Member Id.";
-    } elseif(!filter_var($Mid, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
-        $Mid_err = "Please enter a valid Member Id.";
-    }
-    // Validate Last name
     $Rating = trim($_POST["Rating"]);
     if(empty($Rating)){
         $Rating_err = "Please enter a your Rating.";
@@ -28,14 +21,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     // Check input errors before inserting in database
-    if(!empty($Mid) && !empty($Rating)) {
+    if(!empty($RecipeName) && !empty($Mid) && !empty($Rating)) {
         // Prepare an insert statement
-        $sql = "INSERT INTO Rates (`recipe name`, `member id`, `rating`) 
+        $sql = "INSERT INTO rates (`recipe name`, `member id`, `rating`) 
 		        VALUES (?, ?, ?)";
 
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "isssdssi", $param_RecipeName, $param_MembId, $param_Rating);
+            mysqli_stmt_bind_param($stmt, "sii", $param_RecipeName, $param_MembId, $param_Rating);
 
             // Set parameters
             $param_RecipeName = $RecipeName;
@@ -79,7 +72,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <div class="page-header">
                     <h2>Create Record</h2>
                 </div>
-                <p>Please fill this form and submit to add an Employee record to the database.</p>
+                <p>Please fill this form and submit to add a rating to the database.</p>
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>?recipe_name=<?php echo urlencode($RecipeName); ?>" method="post">
                     <div class="form-group">
                         <label>Recipe Name</label>
@@ -87,8 +80,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
                     <div class="form-group">
                         <label>Member Id</label>
-                        <input type="text" name="Member Id" class="form-control" value="<?php echo $Mid; ?>">
-                        <span class="help-block"><?php echo $Mid_err;?></span>
+                        <input type="text" name="Member Id" class="form-control" value="<?php echo $Mid; ?>" disabled>
                     </div>
                     <div class="form-group">
                         <label>Rating</label>
@@ -100,7 +92,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             <option value="4" <?php if ($Rating == "4") echo "selected"; ?>>4</option>
                             <option value="5" <?php if ($Rating == "5") echo "selected"; ?>>5</option>
                         </select>
-                        <span class="help-block"><?php echo $Rating_err;?></span>
                     </div>
                     <input type="submit" class="btn btn-primary" value="Submit">
                     <a href="index.php" class="btn btn-default">Cancel</a>
