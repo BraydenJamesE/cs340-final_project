@@ -40,7 +40,7 @@ require_once "config.php";
                 <div class="page-header clearfix">
                     <h2> Culinary Collective </h2>
                     <h3> by Brayden Edwards, Anthony Ly, and Ben Sihavong </h3>
-                    <p> Project should include CRUD operations. In this website you can:
+                    <p> This project includes the following CRUD operations:
                     <ol> 	<li> CREATE new users and recipes </li>
                         <li> RETRIEVE recipes, recipe info, and user info</li>
                         <li> UPDATE ratings and user info</li>
