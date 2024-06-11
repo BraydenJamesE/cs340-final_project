@@ -42,9 +42,9 @@ require_once "config.php";
                     <h3> by Brayden Edwards, Anthony Ly, and Ben Sihavong </h3>
                     <p> Project should include CRUD operations. In this website you can:
                     <ol> 	<li> CREATE new users and recipes </li>
-                        <li> RETRIEVE ratings and users for recipes </li>
-                        <li> UPDATE </li>
-                        <li> DELETE  </li>
+                        <li> RETRIEVE recipes, recipe info, and user info</li>
+                        <li> UPDATE ratings and user info</li>
+                        <li> DELETE user accounts when logged in</li>
                     </ol>
                     <div class = "button-group">
                         <?php
