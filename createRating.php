@@ -1,28 +1,27 @@
 <?php
-    session_start();
+    session_start(); // starting the session
 global $link;
 require_once "config.php";
 
-$RecipeName = $Mid = $Rating = "";
+$RecipeName = $Mid = $Rating = ""; // declaring our variables
 
-$RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " ";
-$Mid = $_SESSION['id'];
+$RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " "; // getting the recipe name from the url
+$Mid = $_SESSION['id']; // getting the user id
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $Rating = trim($_POST["Rating"]);
-    if(empty($Rating)){
+    if(empty($Rating)){ // checking the rating isn't empty. The user must submit a rating for it to be passed into our database
         $Rating_err = "Please enter a your Rating.";
     } elseif(!filter_var($Mid, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
         $Rating_err = "Please enter a your Rating.";
     }
 
-    if(!empty($RecipeName) && !empty($Mid) && !empty($Rating)) {
-
-        $sql = "CALL AddOrUpdateRating('$RecipeName', '$Mid', '$Rating')";
-        mysqli_query($link, $sql);
+    if(!empty($RecipeName) && !empty($Mid) && !empty($Rating)) { // ensuring that nothing is empty before attempting to enter it into the database
+        $sql = "CALL AddOrUpdateRating('$RecipeName', '$Mid', '$Rating')"; // preparing our routine
+        mysqli_query($link, $sql); // running the routine
     }
-    mysqli_close($link);
-    header("location: index.php");
+    mysqli_close($link); // closing the link
+    header("location: index.php"); // returning the user back to Main page
 }
 ?>
 
@@ -57,6 +56,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <label>Member Id</label>
                         <input type="text" name="Member Id" class="form-control" value="<?php echo $Mid; ?>" disabled>
                     </div>
+                    <!--
+                    Creating a form for the user to fill out that includes the recipe name (unable to edit), member id (unable to edit) and rating.
+                    -->
                     <div class="form-group">
                         <label>Rating</label>
                         <select name="Rating" class="form-control">
