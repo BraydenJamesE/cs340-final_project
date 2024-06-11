@@ -1,6 +1,6 @@
 <?php
 require_once "config.php";
-
+//Member id from login
 session_start();
 if(!isset($_SESSION['id'])) {
     header("location: login.php");
@@ -10,6 +10,7 @@ $member_id = $_SESSION['id'];
 $Rname = $Rtime = $Rsize = null;
 $Rname_err = $Rtime_err = $Rsize_err = $ingredients_err = $cookware_err = "";
 
+//Grabbing ingredients from database
 $ingredientOptions = "";
 $sql = "SELECT `ingredient name` FROM ingredient";
 $result = mysqli_query($link, $sql);
@@ -20,6 +21,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $ingredientOptions .= "<option value='" . htmlspecialchars($row['ingredient name']) . "'>" . htmlspecialchars($row['ingredient name']) . "</option>";
 }
 
+//Grabbing cookware from database
 $cookwareOptions = "";
 $sql_cookware = "SELECT `cookware name` FROM cookware";
 $result_cookware = mysqli_query($link, $sql_cookware);
@@ -30,6 +32,7 @@ while ($row_cookware = mysqli_fetch_assoc($result_cookware)) {
     $cookwareOptions .= "<option value='" . htmlspecialchars($row_cookware['cookware name']) . "'>" . htmlspecialchars($row_cookware['cookware name']) . "</option>";
 }
 
+//error checking/handling
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $Rname = trim($_POST["Rname"]);
     if(empty($Rname)){
@@ -61,7 +64,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(empty($Rcookware)){
         $cookware_err = "Please select at least one cookware.";
 }
-
+    //SQL for recipe insertion
     if(empty($Rtime_err) && empty($Rsize_err) && empty($Rname_err) && empty($ingredients_err) && empty($cookware_err)){
         $sql = "INSERT INTO recipe (`recipe name`, `cook time`, `serving size`, `member id`) VALUES (?, ?, ?, ?)";
          
@@ -74,7 +77,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $param_member_id = $member_id;
 
             if(mysqli_stmt_execute($stmt)){
-
+                
+                //SQL for contains insertion
                 $sql_contains = "INSERT INTO contains (`recipe name`, `ingredient name`) VALUES (?, ?)";
                 if($stmt_contains = mysqli_prepare($link, $sql_contains)){
                     mysqli_stmt_bind_param($stmt_contains, "ss", $param_recipe_name, $param_ingredient_name);
@@ -88,6 +92,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                 mysqli_stmt_close($stmt_contains);
 
+                //SQL insertion into uses
                 $sql_uses = "INSERT INTO uses (`recipe`, `cookware`) VALUES (?, ?)";
                 if($stmt_uses = mysqli_prepare($link, $sql_uses)){
                     mysqli_stmt_bind_param($stmt_uses, "ss", $param_recipe_name, $param_cookware_name);

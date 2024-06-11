@@ -4,6 +4,7 @@ require_once "config.php";
 $Uname = $Uemail = $Upass = $City = $State = $Country = null;
 $Uname_err = $Uemail_err = $Upass_err = $City_err = $State_err = $Country_err = "";
 
+//error handling
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $Uname = trim($_POST["Uname"]);
@@ -40,7 +41,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $State = trim($_POST["State"]);
 
     $Country = trim($_POST["Country"]);
-
+    
+    //SQL for inserting into member
     if(empty($Uid_err) && empty($Uname_err) && empty($Uemail_err) && empty($Upass_err) && empty($City_err) && empty($State_err) && empty($Country_err)){
         $sql = "INSERT INTO member (`member name`, `email`, `password`) VALUES (?, ?, ?)";
          
@@ -54,9 +56,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
             if(mysqli_stmt_execute($stmt)){
-
+                //Grabbing the generated id from the last query
                 $mem_id = mysqli_insert_id($link);
-
+                //SQL for inserting into location
                 $sql_location = "INSERT INTO location (`member id`, `city`, `state`, `country`) VALUES (?, ?, ?, ?)";
                 if($stmt_location = mysqli_prepare($link, $sql_location)){
                     mysqli_stmt_bind_param($stmt_location, "isss", $param_Uid, $param_City, $param_State, $param_Country);
@@ -77,9 +79,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } else{
                 echo "<center><h4>Error while creating new user</h4></center>";
             }
-            mysqli_stmt_close($stmt);
+            
         }
-         
+    mysqli_stmt_close($stmt);     
     }
 
     mysqli_close($link);
