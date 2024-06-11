@@ -38,7 +38,7 @@ require_once "config.php";
         <div class="row">
             <div class="col-md-12">
                 <div class="page-header clearfix">
-                    <h2> Final Project CS 340 </h2>
+                    <h2> Culinary Collective </h2>
                     <h3> by Brayden Edwards, Anthony Ly, and Ben Sihavong </h3>
                     <p> Project should include CRUD operations. In this website you can:
                     <ol> 	<li> CREATE new users and recipes </li>
