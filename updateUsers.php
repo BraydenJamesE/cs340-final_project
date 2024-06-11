@@ -54,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($memberName_err) && empty($email_err)) {
         $query = "UPDATE `member` SET `member name` = '$memberName', `email` = '$email', `password` = '$password' WHERE `member id` = $memberId;";
         mysqli_query($link, $query);
+        $query = "UPDATE `location` SET `city` = '$city', `state` = '$state', `country` = '$country' WHERE `member id` = $memberId;";
+        mysqli_query($link, $query);
     }
 }
 ?>
@@ -68,6 +70,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .wrapper{
             width: 500px;
             margin: 0 auto;
+        }
+        .form-control{
+            width: 100%;
         }
     </style>
 </head>
