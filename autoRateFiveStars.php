@@ -6,7 +6,7 @@ $userid = $_SESSION['id'];
 $RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " ";
 $Mid = $_SESSION['id'];
 if(!empty($RecipeName)) {
-    $query = "CALL RateRecipe5Stars('$RecipeName', '$userid')";
+    $query = "CALL AddOrUpdateRating('$RecipeName', '$userid', '5')";
     mysqli_query($link, $query);
 }
 header("location: index.php");

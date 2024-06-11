@@ -23,31 +23,35 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Check input errors before inserting in database
     if(!empty($RecipeName) && !empty($Mid) && !empty($Rating)) {
         // Prepare an insert statement
-        $sql = "INSERT INTO rates (`recipe name`, `member id`, `rating`) 
-		        VALUES (?, ?, ?)";
 
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sii", $param_RecipeName, $param_MembId, $param_Rating);
+        $sql = "CALL AddOrUpdateRating('$RecipeName', '$Mid', '$Rating')";
+        mysqli_query($link, $sql);
+        //$sql = "INSERT INTO rates (`recipe name`, `member id`, `rating`)
+		       // VALUES (?, ?, ?)";
 
-            // Set parameters
-            $param_RecipeName = $RecipeName;
-            $param_MembId = $Mid;
-            $param_Rating = $Rating;
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Records created successfully. Redirect to landing page
-                header("location: index.php");
-                exit();
-            } else{
-                echo "<center><h4>Error while entering rating</h4></center>";
-            }
-        }
+//        if($stmt = mysqli_prepare($link, $sql)){
+//            // Bind variables to the prepared statement as parameters
+//            mysqli_stmt_bind_param($stmt, "sii", $param_RecipeName, $param_MembId, $param_Rating);
+//
+//            // Set parameters
+//            $param_RecipeName = $RecipeName;
+//            $param_MembId = $Mid;
+//            $param_Rating = $Rating;
+//            // Attempt to execute the prepared statement
+//            if(mysqli_stmt_execute($stmt)){
+//                // Records created successfully. Redirect to landing page
+//                header("location: index.php");
+//                exit();
+//            } else{
+//                echo "<center><h4>Error while entering rating</h4></center>";
+//            }
+//        }
         // Close statement
-        mysqli_stmt_close($stmt);
+//        mysqli_stmt_close($stmt);
     }
     // Close connection
     mysqli_close($link);
+    header("location: index.php");
 }
 ?>
 

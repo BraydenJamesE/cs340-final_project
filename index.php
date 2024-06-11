@@ -72,7 +72,7 @@ require_once "config.php";
                             }
                         ?>
                         <?php
-                            if (isset($_SESSION['id'])) {
+                            if (!isset($_SESSION['id'])) {
                                 echo "<a href='createUsers.php' class='btn btn-success'>Create Account</a>";
                             }
                             ?>
