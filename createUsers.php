@@ -36,19 +36,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     $City = trim($_POST["City"]);
-    if(empty($City)){
-        $City_err = "Please enter a city.";     
-    }
 
     $State = trim($_POST["State"]);
-    if(empty($State)){
-        $State_err = "Please enter a state.";     
-    }
 
     $Country = trim($_POST["Country"]);
-    if(empty($Upass)){
-        $Country_err = "Please enter a country.";     
-    }
 
     if(empty($Uid_err) && empty($Uname_err) && empty($Uemail_err) && empty($Upass_err) && empty($City_err) && empty($State_err) && empty($Country_err)){
         $sql = "INSERT INTO member (`member name`, `email`, `password`) VALUES (?, ?, ?)";
