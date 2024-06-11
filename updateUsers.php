@@ -57,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query = "UPDATE `location` SET `city` = '$city', `state` = '$state', `country` = '$country' WHERE `member id` = $memberId;";
         mysqli_query($link, $query);
     }
+    header("location: index.php");
 }
 ?>
 
