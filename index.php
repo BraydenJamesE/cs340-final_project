@@ -77,7 +77,7 @@ require_once "config.php";
                             }
                             ?>
                         <?php
-                            if (!isset($_SESSION['id'])) {
+                            if (isset($_SESSION['id'])) {
                                 echo "<a href='createRecipe.php' class='btn btn-success'>Add New Recipe</a>";
                             }
                         ?>
