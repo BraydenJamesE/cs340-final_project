@@ -18,6 +18,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Uemail_err = "Please enter an email.";
     } elseif(!filter_var($Uemail, FILTER_VALIDATE_EMAIL)){
         $Uemail_err = "Please enter a valid email address.";
+    } else {
+        $checkEmailQuery = "SELECT CheckEmail('$Uemail') AS message";
+        $result = mysqli_query($link, $checkEmailQuery);
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            $message = $row['message'];
+            if (!empty($message)) {
+                $Uemail_err = $message;
+            }
+        }
     }
 
     $Upass = trim($_POST["Upass"]);
