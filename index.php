@@ -71,9 +71,13 @@ require_once "config.php";
                                 echo "<a href='deleteUser.php' class='btn btn-success'>Delete Account</a>";
                             }
                         ?>
-                        <a href="createUsers.php" class="btn btn-success">Create Account</a>
                         <?php
                             if (isset($_SESSION['id'])) {
+                                echo "<a href='createUsers.php' class='btn btn-success'>Create Account</a>";
+                            }
+                            ?>
+                        <?php
+                            if (!isset($_SESSION['id'])) {
                                 echo "<a href='createRecipe.php' class='btn btn-success'>Add New Recipe</a>";
                             }
                         ?>
@@ -117,6 +121,9 @@ require_once "config.php";
                             echo "<td>" . $row['Serving Size'] . "</td>";
                             echo "<td>" . $row['Average Rating'] . "</td>";
                             echo "<td>";
+                            if (isset($_SESSION['id'])) {
+                                echo "<a href='autoRateFiveStars.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='Rate this recipe 5 stars!' data-toggle='tooltip'><span class='glyphicon glyphicon-heart'></span></a>";
+                            }
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='createRating.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='Add rating to this recipe!' data-toggle='tooltip'><span class='glyphicon glyphicon-plus-sign'></span></a>";
                             }
