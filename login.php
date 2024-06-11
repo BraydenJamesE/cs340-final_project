@@ -2,18 +2,22 @@
     session_start();
     require_once "config.php";
     
+    // Check if user is logged in
     if(isset($_SESSION['id'])) {
         header("location: index.php");
     }
 
+    // Process form data when form is submitted
     if ($_SERVER ["REQUEST_METHOD"] == "POST") {
         $email = $_POST['email'];
         $password = $_POST['password'];
         
+        // Check if the email and password match a user in the database
         $query = "SELECT * FROM member WHERE email = '$email' AND password = '$password'";
         $result = mysqli_query($link, $query);
         $num_row = mysqli_num_rows($result);
 
+        // If the email and password match a user, save the user's id in the session and redirect to the home page
         if ($num_row == 1) {
             $query2 = "SELECT `member id` FROM member WHERE email = '$email' AND password = '$password'";
             $result2 = mysqli_query($link, $query2);

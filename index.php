@@ -48,6 +48,7 @@ require_once "config.php";
                     </ol>
                     <div class = "button-group">
                         <?php
+                            // Show login button if user is not logged in
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='logout.php' class='btn btn-success'>Logout</a>";
                             }
@@ -56,21 +57,25 @@ require_once "config.php";
                             }
                         ?>
                         <?php
+                            // Show the update button if user is logged in
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='updateUsers.php' class='btn btn-success'>Update Account</a>";
                             }
                         ?>
                         <?php
+                            // Show the delete button if user is logged in
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='deleteUser.php' class='btn btn-success'>Delete Account</a>";
                             }
                         ?>
                         <?php
+                            // Show the create account button if user is not logged in
                             if (!isset($_SESSION['id'])) {
                                 echo "<a href='createUsers.php' class='btn btn-success'>Create Account</a>";
                             }
                             ?>
                         <?php
+                            // Show the create recipe button if user is logged in
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='createRecipe.php' class='btn btn-success'>Add New Recipe</a>";
                             }
@@ -81,7 +86,8 @@ require_once "config.php";
                 </div>
                 <?php
                 require_once "config.php";
-
+                
+                // Get all recipes
                 $sql = "SELECT r.`recipe name` AS 'Recipe Name',
                             r.`Cook time`,
                             m.`member name` AS 'Created By',
@@ -92,6 +98,7 @@ require_once "config.php";
                         LEFT JOIN rates t ON r.`recipe name`  = t.`recipe name`
                         GROUP BY r.`recipe name`, r.`Cook time`, m.`member name`, r.`serving size`";
 
+                // Display the recipes in a table
                 if($result = mysqli_query($link, $sql)) {
                     if (mysqli_num_rows($result) > 0) {
                         echo "<table class='table table-bordered table-striped'>";
@@ -114,15 +121,18 @@ require_once "config.php";
                             echo "<td>" . $row['Serving Size'] . "</td>";
                             echo "<td>" . $row['Average Rating'] . "</td>";
                             echo "<td>";
+                            // Allow rating if user is logged in
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='autoRateFiveStars.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='Rate this recipe 5 stars!' data-toggle='tooltip'><span class='glyphicon glyphicon-heart'></span></a>";
                             }
                             if (isset($_SESSION['id'])) {
                                 echo "<a href='createRating.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='Add rating to this recipe!' data-toggle='tooltip'><span class='glyphicon glyphicon-plus-sign'></span></a>";
                             }
+                            // If user is not logged in, show a message to login or create an account
                             else {
                                 echo "<a href='#' title='Please login or create an account to add a rating.' data-toggle='tooltip' onclick='return false;' style = 'color: #ccc; cursor: not-allowed;'><span class='glyphicon glyphicon-plus-sign'></span></a>";
                             }
+                            // Info button for additional recipe info
                             echo "<a href='viewRecipeInfo.php?recipe_name=" . urlencode($row['Recipe Name']) . "' title='See additional info' data-toggle='tooltip'><span class='glyphicon glyphicon-info-sign'></span></a>";
                             echo "</td>";
                             echo "</tr>";
@@ -137,12 +147,15 @@ require_once "config.php";
                     echo "ERROR: could not execute $sql. <br>" . mysqli_error($link);
                 }
                 echo "<br><h2> Here are some of our most used ingredients!</h2><br>";
-
+                
+                // Get the top 3 most used ingredients
                 $sql2 = "SELECT c.`ingredient name` as 'Ingredient', COUNT(*) as 'Number of Recipes with this ingredient' 
                     FROM contains c
                     GROUP BY c.`ingredient name`
                     ORDER BY `Number of Recipes with this ingredient` DESC
                     LIMIT 3";
+                    
+                // Display the top 3 most used ingredients in a table
                 if($result2 = mysqli_query($link, $sql2)) {
                     if (mysqli_num_rows($result2) > 0) {
                         echo "<div class='col-md-4'>";
