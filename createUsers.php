@@ -1,14 +1,11 @@
 <?php
-// Include config file
 require_once "config.php";
 
 $Uname = $Uemail = $Upass = $City = $State = $Country = null;
 $Uname_err = $Uemail_err = $Upass_err = $City_err = $State_err = $Country_err = "";
 
-// Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    // Validate Name
     $Uname = trim($_POST["Uname"]);
     if(empty($Uname)){
         $Uname_err = "Please enter your name.";
@@ -16,7 +13,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Uname_err = "Please enter a valid name.";
     } 
 
-    // Validate Email
     $Uemail = trim($_POST["Uemail"]);
     if(empty($Uemail)){
         $Uemail_err = "Please enter an email.";
@@ -24,7 +20,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Uemail_err = "Please enter a valid email address.";
     }
 
-    // Validate Password
     $Upass = trim($_POST["Upass"]);
     if(empty($Upass)){
         $Upass_err = "Please enter a password.";     
@@ -45,23 +40,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Country_err = "Please enter a country.";     
     }
 
-    // Check input errors before inserting in database
     if(empty($Uid_err) && empty($Uname_err) && empty($Uemail_err) && empty($Upass_err) && empty($City_err) && empty($State_err) && empty($Country_err)){
-        // Prepare an insert statement
         $sql = "INSERT INTO member (`member name`, `email`, `password`) VALUES (?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "sss", $param_Uname, $param_Uemail, $param_Upass);
             
-            // Set parameters
             $param_Uname = $Uname;
             $param_Uemail = $Uemail;
             $param_Upass = $Upass;
 
 
 
-            // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
 
                 $mem_id = mysqli_insert_id($link);
@@ -81,7 +71,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                 mysqli_stmt_close($stmt_location);
 
-                // Records created successfully. Redirect to landing page
                 header("location: index.php");
                 exit();
             } else{
@@ -89,11 +78,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
         }
          
-        // Close statement
         mysqli_stmt_close($stmt);
     }
 
-    // Close connection
     mysqli_close($link);
 
 ?>

@@ -1,20 +1,16 @@
 <?php
 global $link;
 session_start();
-//$currentpage="View Employees";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Company DB</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <style type="text/css">
@@ -35,9 +31,7 @@ session_start();
 </head>
 <body>
 <?php
-// Include config file
 require_once "config.php";
-//		include "header.php";
 ?>
 <div class="wrapper">
     <div class="container-fluid">
@@ -86,7 +80,6 @@ require_once "config.php";
                     <h2 class="pull-left">Recipes</h2>
                 </div>
                 <?php
-                // Include config file
                 require_once "config.php";
 
                 $sql = "SELECT r.`recipe name` AS 'Recipe Name',
@@ -136,7 +129,6 @@ require_once "config.php";
                         }
                         echo "</tbody>";
                         echo "</table>";
-                        // Free result set
                         mysqli_free_result($result);
                     } else {
                         echo "<p class='lead'><em>No records were found.</em></p>";
@@ -144,7 +136,6 @@ require_once "config.php";
                 } else {
                     echo "ERROR: could not execute $sql. <br>" . mysqli_error($link);
                 }
-                          /* Creating a sub database */
                 echo "<br><h2> Here are some of our most used ingredients!</h2><br>";
 
                 $sql2 = "SELECT c.`ingredient name` as 'Ingredient', COUNT(*) as 'Number of Recipes with this ingredient' 
@@ -177,7 +168,6 @@ require_once "config.php";
                     } else {
                     echo "<p class='lead'><em>No records were found for ingredient amounts.<em></p>";
                 }
-                // Close connection
                 mysqli_close($link);
                 ?>
             </div>

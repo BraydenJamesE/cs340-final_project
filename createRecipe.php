@@ -1,5 +1,4 @@
 <?php
-// Include config file
 require_once "config.php";
 
 session_start();
@@ -31,7 +30,6 @@ while ($row_cookware = mysqli_fetch_assoc($result_cookware)) {
     $cookwareOptions .= "<option value='" . htmlspecialchars($row_cookware['cookware name']) . "'>" . htmlspecialchars($row_cookware['cookware name']) . "</option>";
 }
 
-// Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $Rname = trim($_POST["Rname"]);
     if(empty($Rname)){
@@ -40,7 +38,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Rname_err = "Please enter a valid name.";
     } 
 
-    // Validate Name
     $Rtime = trim($_POST["Rtime"]);
     if(empty($Rtime)){
         $Rtime_err = "Please enter a time.";
@@ -48,7 +45,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Rtime_err = "Please enter a valid time";
     } 
 
-    // Validate Email
     $Rsize = trim($_POST["Rsize"]);
     if(empty($Rsize)){
         $Rsize_err = "Please enter a serving size.";
@@ -61,28 +57,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $ingredients_err = "Please select at least one ingredient.";
     }
 
-    // Validate Cookware
     $Rcookware = $_POST['cookware'];
     if(empty($Rcookware)){
         $cookware_err = "Please select at least one cookware.";
 }
 
-    // Check input errors before inserting in database
     if(empty($Rtime_err) && empty($Rsize_err) && empty($Rname_err) && empty($ingredients_err) && empty($cookware_err)){
-        // Prepare an insert statement
         $sql = "INSERT INTO recipe (`recipe name`, `cook time`, `serving size`, `member id`) VALUES (?, ?, ?, ?)";
          
         if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "siii", $param_Rname, $param_Rtime, $param_Rsize, $param_member_id);
             
-            // Set parameters
             $param_Rname = $Rname;
             $param_Rtime = $Rtime;
             $param_Rsize = $Rsize;
             $param_member_id = $member_id;
 
-            // Attempt to execute the prepared statement
             if(mysqli_stmt_execute($stmt)){
 
                 $sql_contains = "INSERT INTO contains (`recipe name`, `ingredient name`) VALUES (?, ?)";
@@ -111,19 +101,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                 mysqli_stmt_close($stmt_uses);
 
-                // Records created successfully. Redirect to landing page
                 header("location: index.php");
                 exit();
             } else{
                 echo "<center><h4>Error while creating new recipe</h4></center>";
             }
         }
-         
-        // Close statement
+
         mysqli_stmt_close($stmt);
     }
 
-    // Close connection
     mysqli_close($link);
 }
 ?>

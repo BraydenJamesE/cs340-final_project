@@ -1,17 +1,13 @@
 <?php
-// Retrieve the recipe name from the URL parameter
     session_start();
-// Include config file
 global $link;
 require_once "config.php";
 
-// Define variables and initialize with empty values
 $RecipeName = $Mid = $Rating = "";
 
 $RecipeName = isset($_GET['recipe_name']) ? urldecode($_GET['recipe_name']) : " ";
 $Mid = $_SESSION['id'];
 
-// Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $Rating = trim($_POST["Rating"]);
     if(empty($Rating)){
@@ -20,14 +16,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $Rating_err = "Please enter a your Rating.";
     }
 
-    // Check input errors before inserting in database
     if(!empty($RecipeName) && !empty($Mid) && !empty($Rating)) {
-        // Prepare an insert statement
 
         $sql = "CALL AddOrUpdateRating('$RecipeName', '$Mid', '$Rating')";
         mysqli_query($link, $sql);
     }
-    // Close connection
     mysqli_close($link);
     header("location: index.php");
 }
