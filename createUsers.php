@@ -76,9 +76,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             } else{
                 echo "<center><h4>Error while creating new user</h4></center>";
             }
+            mysqli_stmt_close($stmt);
         }
          
-        mysqli_stmt_close($stmt);
     }
 
     mysqli_close($link);
