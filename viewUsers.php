@@ -31,8 +31,6 @@
                 echo "<td>$row[3]</td>";
                 echo "<td>$row[4]</td>";
             }
-            mysqli_free_result($result);
-            mysqli_close($link);
         ?>
     </body>
 </html>
